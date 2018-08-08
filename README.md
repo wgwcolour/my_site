@@ -5,6 +5,7 @@
 - settings.py中需要自己配置自己的邮箱
 - 安装requirements.txt文件中的库
 完成上面三点后即可使用：
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
+
+- python manage.py makemigrations
+- python manage.py migrate
+- python manage.py runserver
