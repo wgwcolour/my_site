@@ -11,4 +11,4 @@
 - python manage.py migrate
 - python manage.py runserver
 # 我的博客地址：
-[吾知]()
+[吾知](wuzhi.live)
