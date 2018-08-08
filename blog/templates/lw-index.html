@@ -1,0 +1,216 @@
+{% load static %}
+{% load markdownify %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>首页  | 吾知</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="icon" sizes="192x192" href="{% static 'i/favicon.jpg' %}">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="{% static 'i/app-icon72x72@2x.png' %}">
+  <meta name="msapplication-TileImage" content="{% static 'i/app-icon72x72@2x.png' %}">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+  <link rel="stylesheet" href="{% static 'css/amazeui.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+
+<body id="blog">
+
+<header class="am-g am-g-fixed blog-fixed blog-text-center blog-header">
+    <div class="am-u-sm-8 am-u-sm-centered">
+    </div>
+</header>
+<hr>
+<!-- nav start -->
+<nav class="am-g am-g-fixed blog-fixed blog-nav">
+<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only blog-button" data-am-collapse="{target: '#blog-collapse'}" ><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="blog-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li class="am-active"><a href="/">首页</a></li>
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          分类 <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+        {% for tag in tags %}
+          <li><a href="/tag/{{ tag.id }}/">{{ tag.tag }}</a></li>
+        {% endfor %}
+        </ul>
+      </li>
+      <li><a href="#">标准文章</a></li>
+      <li><a href="/photo">图片库</a></li>
+      <li><a href="/artic">存档</a></li>
+      {% if coke == 0 %}
+      <li><a href="/login">登录</a></li>
+      {% endif %}
+    </ul>
+    <form class="am-topbar-form am-topbar-right am-form-inline" role="search" method="get" id="searchform" action={% url 'haystack_search' %}>
+      <div class="am-form-group">
+        <input type="search" name="q" class="am-form-field am-input-sm" placeholder="搜索">
+      </div>
+    </form>
+  </div>
+</nav>
+<hr>
+<!-- nav end -->
+<!-- banner start -->
+<div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-article-margin">
+    <div data-am-widget="slider" class="am-slider am-slider-b1" data-am-slider='{&quot;controlNav&quot;:false}' >
+    <ul class="am-slides">
+    {% for post in posts %}
+      <li>
+        {% if forloop.counter|divisibleby:3 %}
+            <img src="{% static 'i/b3.jpg' %}">
+        {% elif forloop.counter|divisibleby:2 %}
+            <img src="{% static 'i/b2.jpg' %}">
+        {% else %}
+            <img src="{% static 'i/b1.jpg' %}">
+        {% endif %}
+            <div class="blog-slider-desc am-slider-desc ">
+                <div class="blog-text-center blog-slider-con">
+                    <span><a href="/tag/{{ post.tag.id }}/" class="blog-color">{{ post.tag }} &nbsp;</a></span>               
+                    <h1 class="blog-h-margin"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h1>
+                    <p>{{ post.body|tagse|linebreaks }}
+                    </p>
+                    <span class="blog-bor">{{ post.created }}</span>
+                    <br><br><br><br><br><br><br>                
+                </div>
+            </div>
+      </li>
+      {% endfor %}
+    </ul>
+    </div>
+</div>
+<!-- banner end -->
+
+<!-- content srart -->
+<div class="am-g am-g-fixed blog-fixed">
+    <div class="am-u-md-8 am-u-sm-12">
+        {% for post in posts %}
+        <article class="am-g blog-entry-article">
+            <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">
+                <img src="/{{ post.img.url }}" alt="" class="am-u-sm-12">
+            </div>
+            <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
+                <span><a href="/tag/{{ post.tag.id }}/" class="blog-color">{{ post.tag }} &nbsp;</a></span>
+                <span> @{{ post.author }} &nbsp;</span>
+                <span>{{ post.created }}</span>
+                <h1><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h1>
+                <p>{{ post.body|paragraph|linebreaks }}
+                </p>
+                <p><a href="" class="blog-continue">continue reading</a></p>
+            </div>
+        </article>
+        {% endfor %}
+        <ul class="am-pagination">
+    {% if posts.has_previous %}
+  <li class="am-pagination-prev"><a href="?page={{ posts.previous_page_number }}">&laquo; Prev</a></li>
+    {% endif %}
+    {% if posts.has_next %}
+  <li class="am-pagination-next"><a href="?page={{ posts.next_page_number }}">Next &raquo;</a></li>
+    {% endif %}
+</ul>
+    </div>
+
+    <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
+        <div class="blog-sidebar-widget blog-bor">
+            <h2 class="blog-text-center blog-title"><span>About ME</span></h2>
+            <img src="{% static 'i/f18.jpg' %}" alt="about me" class="blog-entry-img" >
+            <p>男</p>
+            <p>
+        一直热衷于瞎鼓捣的人。
+        </p><p>我不想成为一个庸俗的人。十年百年后，当我们死去，质疑我们的人同样死去，后人看到的是裹足不前、原地打转的你，还是一直奔跑、走到远方的我？</p>
+        </div>
+        <div class="blog-sidebar-widget blog-bor">
+            <h2 class="blog-text-center blog-title"><span>Contact ME</span></h2>
+            <p>
+                <a href=""><span class="am-icon-qq am-icon-fw am-primary blog-icon"></span></a>
+                <a href=""><span class="am-icon-github am-icon-fw blog-icon"></span></a>
+                <a href=""><span class="am-icon-weibo am-icon-fw blog-icon"></span></a>
+                <a href=""><span class="am-icon-reddit am-icon-fw blog-icon"></span></a>
+                <a href=""><span class="am-icon-weixin am-icon-fw blog-icon"></span></a>
+            </p>
+        </div>
+        <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
+            <h2 class="blog-title"><span>TAG cloud</span></h2>
+            <div class="am-u-sm-12 blog-clear-padding">
+            {% for tag in tags %}
+            <a href="/tag/{{ tag.id }}/" class="blog-tag">{{ tag.tag }}</a>
+            {% endfor %}
+            </div>
+        </div>
+        <!--<div class="blog-sidebar-widget blog-bor">
+            <h2 class="blog-title"><span>么么哒</span></h2>
+            <ul class="am-list">
+                <li><a href="#">每个人都有一个死角， 自己走不出来，别人也闯不进去。</a></li>
+                <li><a href="#">我把最深沉的秘密放在那里。</a></li>
+                <li><a href="#">你不懂我，我不怪你。</a></li>
+                <li><a href="#">每个人都有一道伤口， 或深或浅，盖上布，以为不存在。</a></li>
+            </ul>
+        </div>-->
+    </div>
+</div>
+<!-- content end -->
+
+
+
+  <footer class="blog-footer">
+    <div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-footer-padding">
+        <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
+            <h3>博客简介</h3>
+            <p class="am-text-sm">这是一个个人技术博客。<br> 主要记录一些我自己学到的东西和一些个人想法。 <br> 我相信，任何一篇文章都会产生价值。<br>世界真的很精彩！<br><br>
+            种一棵树，最好的时间是十年前，其次是现在。</p>
+        </div>
+        <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
+            <h3>社交账号 #目前不能用</h3>
+            <p>
+                <a href=""><span class="am-icon-qq am-icon-fw am-primary blog-icon blog-icon"></span></a>
+                <a href=""><span class="am-icon-github am-icon-fw blog-icon blog-icon"></span></a>
+                <a href=""><span class="am-icon-weibo am-icon-fw blog-icon blog-icon"></span></a>
+                <a href=""><span class="am-icon-reddit am-icon-fw blog-icon blog-icon"></span></a>
+                <a href=""><span class="am-icon-weixin am-icon-fw blog-icon blog-icon"></span></a>
+            </p>
+            <h3>吾知/无知</h3>
+            <p>吾知，即我知道的。记录我知道的东西。无知，当你知道的越多，你才越明白自己究竟有多渺小。路漫漫其修远兮，吾将上下而求索。怕什么真理无穷，进一寸有一寸的欢喜。</p>          
+        </div>
+        <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
+              <h1>我们站在了巨人的肩膀上</h1>
+             <h3>MySite</h3>
+            <p>
+                <ul>
+                    <li>python</li>
+                    <li>Django</li>
+                    <li>sqlite</li>
+                    <li>Nginx</li>
+                    <li>...</li>
+                </ul>
+            </p>
+        </div>
+    </div>    
+    <div class="blog-text-center">© 2018 任何问题请联系我. <a href="http://wuzhi.live" target="_blank" title="">wgwxuexi@gmail.com</a><a href="" title="" target="_blank"></a></div>  </footer>
+
+
+
+
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="/static/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="{% static 'js/amazeui.min.js' %}"></script>
+</body>
+</html>

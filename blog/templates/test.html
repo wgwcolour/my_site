@@ -1,0 +1,13 @@
+{% load static %}
+{% load markdownify %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/highlights/colorful.css' %}">
+    <title>Title</title>
+</head>
+<body>
+<div class="codehilite">{{ post.body|markdown|safe }}</div>
+</body>
+</html>

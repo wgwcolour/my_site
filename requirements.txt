@@ -1,0 +1,10 @@
+Django==2.0.6
+django-haystack==2.8.1
+jieba==0.39
+Markdown==2.6.11
+mistune==0.8.3
+Pillow==5.0.0
+Pygments==2.2.0
+pytz==2018.4
+uWSGI==2.0.17
+Whoosh==2.7.4
